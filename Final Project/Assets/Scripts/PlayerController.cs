@@ -17,12 +17,15 @@ public class PlayerController : MonoBehaviour
 
     public GameObject shot;
     public Transform shotSpawn;
+    public Transform[] pickupShotSpawns;
     public float fireRate;
 
     public AudioSource shotsFired;
 
     private Rigidbody rb;
     private float nextFire;
+
+    private bool pickup;
 
     private void Start()
     {
@@ -36,7 +39,33 @@ public class PlayerController : MonoBehaviour
             nextFire = Time.time + fireRate;
             // GameObject clone =
             Instantiate(shot, shotSpawn.position, shotSpawn.rotation); // as GameObject
+            
+
+            if (pickup == true)
+            {
+                Debug.Log("pickup true");
+                foreach (var shotSpawns in pickupShotSpawns)
+                {
+                    Instantiate(shot, shotSpawns.position, shotSpawns.rotation);
+                }
+            }
+
             shotsFired.Play();
+        }
+
+        if (pickup == true)
+        {
+            Debug.Log("pickup true");
+            if (Input.GetButton("Fire1") && Time.time > nextFire)
+            {
+                nextFire = Time.time + fireRate;
+
+                foreach (var shotSpawns in pickupShotSpawns)
+                {
+                    Instantiate(shot, shotSpawns.position, shotSpawns.rotation);
+                }
+                shotsFired.Play();
+            }
         }
         
     }
@@ -57,5 +86,12 @@ public class PlayerController : MonoBehaviour
         );
 
         rb.rotation = Quaternion.Euler(0.0f, 0.0f, rb.velocity.x * -tilt);
+    }
+
+    public void Pickup()
+    {
+        pickup = true;
+
+        Debug.Log("Activate Pickup");
     }
 }
