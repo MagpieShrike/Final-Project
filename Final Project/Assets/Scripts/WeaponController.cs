@@ -5,7 +5,7 @@ using UnityEngine;
 public class WeaponController : MonoBehaviour
 {
     public GameObject shot;
-    public Transform shotSpawn;
+    public Transform[] shotSpawns;
     public float fireRate;
     public float delay;
 
@@ -21,7 +21,11 @@ public class WeaponController : MonoBehaviour
     // Update is called once per frame
     void Fire()
     {
-        Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+        foreach (var shotSpawn in shotSpawns)
+        {
+            Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+        }
+        
         audioSource.Play();
     }
 }

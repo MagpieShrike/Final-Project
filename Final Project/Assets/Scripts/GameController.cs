@@ -19,6 +19,11 @@ public class GameController : MonoBehaviour
     public Text restartText;
     public Text creditText;
 
+    public AudioClip bgMusic;
+    public AudioClip bossMusic;
+    public AudioClip winMusic;
+    public AudioSource musicSource;
+
     private int points;
     private bool gameOver;
     private bool restart;
@@ -26,6 +31,18 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (SceneManager.GetActiveScene().name == "Space Shooter")
+        {
+            musicSource.clip = bgMusic;
+            musicSource.Play();
+        }
+        else if (SceneManager.GetActiveScene().name == "Boss Battle")
+        {
+            musicSource.clip = bossMusic;
+            musicSource.Play();
+        }
+        
+
         points = 0;
         UpdateScore();
 
@@ -87,12 +104,15 @@ public class GameController : MonoBehaviour
     {
         pointText.text = "Points: " + points;
 
-        if(points >= 100)
+        if(points >= 100 && SceneManager.GetActiveScene().name == "Space Shooter")
         {
             gameOverText.text = "You Win!";
             creditText.text = "Created by Halie Chalkley";
             gameOver = true;
+
+            SceneManager.LoadScene("Boss Battle");      
         }
+
     }
 
     public void GameOver()

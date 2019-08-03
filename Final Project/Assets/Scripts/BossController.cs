@@ -24,7 +24,7 @@ public class BossController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         currentSpeed = rb.velocity.z;
         StartCoroutine(Evade());
-        destination = new Vector3(0, 180, (float)11.75);
+        destination = new Vector3(0, 0, (float)11.75);
     }
 
     // Update is called once per frame
