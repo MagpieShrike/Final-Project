@@ -22,15 +22,22 @@ public class GameController : MonoBehaviour
     public AudioClip bgMusic;
     public AudioClip bossMusic;
     public AudioClip winMusic;
+    public AudioClip loseMusic;
     public AudioSource musicSource;
 
     private int points;
     private bool gameOver;
     private bool restart;
 
+    GameObject boss;
+
+    
+
     // Start is called before the first frame update
     void Start()
     {
+        boss = GameObject.FindWithTag("Boss");
+
         if (SceneManager.GetActiveScene().name == "Space Shooter")
         {
             musicSource.clip = bgMusic;
@@ -56,7 +63,7 @@ public class GameController : MonoBehaviour
         StartCoroutine (SpawnWaves());
     }
 
-    private void Update()
+     void Update()
     {
         if (restart)
         {
@@ -68,6 +75,24 @@ public class GameController : MonoBehaviour
 
         if (Input.GetKey("escape"))
             Application.Quit();
+
+        bossState();
+    }
+
+    void bossState()
+    {
+        if (SceneManager.GetActiveScene().name == "Boss Battle" && musicSource.clip != winMusic)
+        {
+            if (!boss)
+            {
+                musicSource.clip = winMusic;
+                musicSource.Play();
+
+                gameOverText.text = "You Win!";
+                creditText.text = "Created by Halie Chalkley";
+                gameOver = true;
+            }
+        }
     }
 
     IEnumerator SpawnWaves()
@@ -117,8 +142,12 @@ public class GameController : MonoBehaviour
 
     public void GameOver()
     {
+        musicSource.clip = loseMusic;
+        musicSource.Play();
         gameOverText.text = "Game Over";
         creditText.text = "Created by Halie Chalkley";
         gameOver = true;
     }
+
+
 }
